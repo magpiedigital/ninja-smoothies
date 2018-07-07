@@ -8,29 +8,46 @@
           <li class="chip" v-for="(ingredient, index) in smoothie.ingredients" :key="index">{{ ingredient }}</li>
         </ul>
       </div>
+      <span class="btn-floating btn-large halfway-fab pink">
+        <router-link :to="{ name: 'editsmoothie', params: { smoothie_slug: smoothie.slug } }">
+          <i class="material-icons">edit</i>
+        </router-link>
+      </span>
     </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import db from '@/firebase/init'
 
 export default {
   name: 'home',
   data () {
     return {
-      smoothies: [
-        { title: 'Ninja Brew', slug: 'ninja-brew', ingredients: ['bananas', 'coffee', 'milk'], id: 1 },
-        { title: 'Morning Mood', slug: 'morning-mood', ingredients: ['mango', 'lime', 'juice'], id: 2 }
-      ]
+      smoothies: []
     }
   },
   methods: {
     deleteSmoothie(id) {
-      this.smoothies = this.smoothies.filter(smoothie => {
-        return smoothie.id !== id
+      db.collection('smoothies').doc(id).delete()
+      .then(() => {
+        this.smoothies = this.smoothies.filter(smoothie => {
+          return smoothie.id !== id
+        })
       })
     }
+  },
+  created() {
+    // fetch ddata fromfirestore
+    db.collection('smoothies').get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        let smoothie = doc.data()
+        smoothie.id = doc.id
+        this.smoothies.push(smoothie)
+      })
+    })
   }
 }
 </script>

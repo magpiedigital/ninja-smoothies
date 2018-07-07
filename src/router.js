@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import About from './views/About.vue'
+import AddSmoothie from './views/AddSmoothie.vue'
+import EditSmoothie from './views/EditSmoothie.vue'
 
 Vue.use(Router)
 
@@ -13,9 +14,14 @@ export default new Router({
       component: Home
     },
     {
-      path: '/about',
-      name: 'about',
-      component: About
+      path: '/add-smoothie',
+      name: 'addsmoothie',
+      component: AddSmoothie
+    },
+    {
+      path: '/edit-smoothie/:smoothie_slug',
+      name: 'editsmoothie',
+      component: EditSmoothie
     }
   ]
 })
